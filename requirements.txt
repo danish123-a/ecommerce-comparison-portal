@@ -1,0 +1,21 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# E-Commerce Price Comparison Agent — Requirements
+# Install with:  pip install -r requirements.txt
+# After install, also run:  playwright install chromium
+# ─────────────────────────────────────────────────────────────────────────────
+
+# UI framework (Gradio web app)
+gradio>=4.0.0
+
+# Web scraping — browser automation (Amazon, Flipkart, Meesho)
+playwright>=1.40.0
+
+# Web scraping — HTML parsing (BeautifulSoup)
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Standard Library (already included with Python — no install needed):
+#   argparse, datetime, io, json, os, random, re, sqlite3, sys,
+#   unittest, urllib.parse, webbrowser
+# ─────────────────────────────────────────────────────────────────────────────

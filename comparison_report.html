@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Price Comparison: campus shoes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary-glow: linear-gradient(135deg, #38bdf8, #818cf8);
+            --gold-glow: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(129, 140, 248, 0.08) 0px, transparent 50%);
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: var(--primary-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+        .summary-container {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid #fbbf24;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-container h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+        
+        .summary-container p {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+        
+        .summary-container .highlight {
+            font-weight: 600;
+            color: #fbbf24;
+            font-size: 1.25rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .highlight-card {
+            border-color: rgba(251, 191, 36, 0.4);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
+        }
+        
+        .highlight-card:hover {
+            border-color: rgba(251, 191, 36, 0.8);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.3);
+        }
+        
+        .cheapest-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gold-glow);
+            color: #000000;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+        }
+        
+        .card-image-container {
+            width: 100%;
+            height: 200px;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .product-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .platform-badge {
+            display: inline-block;
+            align-self: flex-start;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-title {
+            font-size: 1.05rem;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #e2e8f0;
+            margin-bottom: 1.25rem;
+            height: 3rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .price-section {
+            margin-top: auto;
+            margin-bottom: 1.25rem;
+        }
+        
+        .price-value {
+            font-size: 1.6rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .highlight-card .price-value {
+            background: var(--gold-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .buy-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .buy-button:hover {
+            background: var(--primary-glow);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(129, 140, 248, 0.4);
+        }
+        
+        .highlight-card .buy-button {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+        
+        .highlight-card .buy-button:hover {
+            background: var(--gold-glow);
+            border-color: transparent;
+            color: #000000;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+        
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            body {
+                padding: 1.5rem 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>E-Commerce Price Comparison</h1>
+            <p>Search Results for "<strong>campus shoes</strong>" • Generated on June 13, 2026 at 02:49 AM</p>
+        </header>
+        
+        
+            <div class="summary-container">
+                <h2>🏆 Deal Recommendation</h2>
+                <p>The best deal is <strong>[Est] [Meesho] Campus Sport Shoe Laces & Cleaning Kit Pack...</strong> on <strong>Meesho</strong> for <span class="highlight">₹179.10</span>!</p>
+            </div>
+            
+        
+        <div class="grid">
+            
+            <div class="product-card highlight-card">
+                <div class="cheapest-tag">Cheapest</div>
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Shoe+Laces+Cleaning+Kit" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=500" alt="[Est] [Meesho] Campus Sport Shoe Laces & Cleaning Kit Pack">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Sport Shoe Laces & Cleaning Kit Pack">[Est] [Meesho] Campus Sport Shoe Laces & Cleaning Kit Pack</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹179.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Shoe+Laces+Cleaning+Kit" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Shoe+Laces+Cleaning+Kit+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=500" alt="[Google] Campus Sport Shoe Laces & Cleaning Kit Pack">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Sport Shoe Laces & Cleaning Kit Pack">[Google] Campus Sport Shoe Laces & Cleaning Kit Pack</h3>
+                    <div class="price-section">
+                        <span class="price-value">$183.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Shoe+Laces+Cleaning+Kit+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-oxyfit-n-men-s-casual-shoes-memory-foam-pillofoam-comfort-slip-on-walking-men/p/itmd25926768544e?pid=SHOGA3HAHFKF5NBC&lid=LSTSHOGA3HAHFKF5NBC15OTFJ&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_16&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOGA3HAHFKF5NBC.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/y/a/q/8-oxyfit-cg-02-b-8-0-campus-blue-grey-original-imahnmhvkeqpgzpc.jpeg?q=70" alt="OXYFIT (N) Men's Casual Shoes | Memory Foam & PilloFoam...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="OXYFIT (N) Men's Casual Shoes | Memory Foam & PilloFoam...">OXYFIT (N) Men's Casual Shoes | Memory Foam & PilloFoam...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹354.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-oxyfit-n-men-s-casual-shoes-memory-foam-pillofoam-comfort-slip-on-walking-men/p/itmd25926768544e?pid=SHOGA3HAHFKF5NBC&lid=LSTSHOGA3HAHFKF5NBC15OTFJ&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_16&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOGA3HAHFKF5NBC.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Comfort+Cushioned+Slides" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="[Est] [Meesho] Campus Comfort Cushioned Slides & Slippers">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Comfort Cushioned Slides & Slippers">[Est] [Meesho] Campus Comfort Cushioned Slides & Slippers</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹449.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Comfort+Cushioned+Slides" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/action-athleo-atg-424-comfortable-lightweight-breathable-durable-sports-slip-on-running-shoes-men/p/itm05ba4c824036e?pid=SHOGAFP5ZJKSTC9K&lid=LSTSHOGAFP5ZJKSTC9K5HVEBF&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_5&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiSiwIBfro-Yk-tit13rg7O9BgiplnCzp10pBphdC7kVcQokyb4EZ8fnqLyIEWFM59ZE1N4d-vQ1OtsNzS2d9OdY9QWMJPI4egdmz5nn89L_DQ%3D%3D&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/e/k/5/8-atg-424-black-8-action-black-original-imahec4qqjwa4h7h.jpeg?q=70" alt="Athleo ATG-424 Comfortable Lightweight Breathable Durab...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="Athleo ATG-424 Comfortable Lightweight Breathable Durab...">Athleo ATG-424 Comfortable Lightweight Breathable Durab...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹458.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/action-athleo-atg-424-comfortable-lightweight-breathable-durable-sports-slip-on-running-shoes-men/p/itm05ba4c824036e?pid=SHOGAFP5ZJKSTC9K&lid=LSTSHOGAFP5ZJKSTC9K5HVEBF&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_5&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiSiwIBfro-Yk-tit13rg7O9BgiplnCzp10pBphdC7kVcQokyb4EZ8fnqLyIEWFM59ZE1N4d-vQ1OtsNzS2d9OdY9QWMJPI4egdmz5nn89L_DQ%3D%3D&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Comfort+Cushioned+Slides+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="[Google] Campus Comfort Cushioned Slides & Slippers">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Comfort Cushioned Slides & Slippers">[Google] Campus Comfort Cushioned Slides & Slippers</h3>
+                    <div class="price-section">
+                        <span class="price-value">$459.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Comfort+Cushioned+Slides+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/jqr-east-plus-running-shoes-men/p/itmef0f8007c1528?pid=SHOGYFZ3PKCGU9GF&lid=LSTSHOGYFZ3PKCGU9GFJZJY3E&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_17&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiRN66UwigdQXMnF4F9agzuvSkCxWrf2Qha8aloClYqhxu9_QIVUfeUMuAcwfgILnhpW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-shoe/s/v/p/9-east-plus-9-jqr-wht-c-grn-original-imahjxg9ybmccgxc.jpeg?q=70" alt="EAST PLUS Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="EAST PLUS Running Shoes For Men">EAST PLUS Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹494.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/jqr-east-plus-running-shoes-men/p/itmef0f8007c1528?pid=SHOGYFZ3PKCGU9GF&lid=LSTSHOGYFZ3PKCGU9GFJZJY3E&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_17&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiRN66UwigdQXMnF4F9agzuvSkCxWrf2Qha8aloClYqhxu9_QIVUfeUMuAcwfgILnhpW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/abros-boostz-running-training-gym-shoes-men-lightweight-comfortable-running/p/itm6987e9b3893a5?pid=SHOH42ABQ9ESBJDT&lid=LSTSHOH42ABQ9ESBJDTMQQWIX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_1&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiTMwy1QbSi3JMwNO-ExcTmaKoFMs-Zw4lTtyx8trqhGDxejaiNONfQGIerp56nNdHOi13qUKb9kwv5ZxOpzXoO6&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/q/t/j/-original-imahfhprs2zxfgqz.jpeg?q=70" alt="BOOSTZ Running, Training, Gym Shoes for Men | Lightweig...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="BOOSTZ Running, Training, Gym Shoes for Men | Lightweig...">BOOSTZ Running, Training, Gym Shoes for Men | Lightweig...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹521.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/abros-boostz-running-training-gym-shoes-men-lightweight-comfortable-running/p/itm6987e9b3893a5?pid=SHOH42ABQ9ESBJDT&lid=LSTSHOH42ABQ9ESBJDTMQQWIX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_1&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiTMwy1QbSi3JMwNO-ExcTmaKoFMs-Zw4lTtyx8trqhGDxejaiNONfQGIerp56nNdHOi13qUKb9kwv5ZxOpzXoO6&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/action-athleo-atg-496-comfortable-lightweight-breathable-durable-running-lace-up-shoes-men/p/itm1fa04dec6c412?pid=SHOGW5WW7NBT7WWS&lid=LSTSHOGW5WW7NBT7WWSC9SUAU&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_6&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiSZPHzemOTFjfCRQTnRBw-7c7HfiG4oYFuoEBJGMgHgqh2cebdye66zGSTEIU4Q0rNE1N4d-vQ1OtsNzS2d9OdY9QWMJPI4egdmz5nn89L_DQ%3D%3D&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/n/u/v/9-atg-496-9-action-light-grey-orange-original-imagw5wvzyjyyq9m.jpeg?q=70" alt="Athleo ATG-496 Comfortable Lightweight Breathable Durab...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="Athleo ATG-496 Comfortable Lightweight Breathable Durab...">Athleo ATG-496 Comfortable Lightweight Breathable Durab...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹674.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/action-athleo-atg-496-comfortable-lightweight-breathable-durable-running-lace-up-shoes-men/p/itm1fa04dec6c412?pid=SHOGW5WW7NBT7WWS&lid=LSTSHOGW5WW7NBT7WWSC9SUAU&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_6&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiSZPHzemOTFjfCRQTnRBw-7c7HfiG4oYFuoEBJGMgHgqh2cebdye66zGSTEIU4Q0rNE1N4d-vQ1OtsNzS2d9OdY9QWMJPI4egdmz5nn89L_DQ%3D%3D&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-C-BLU-Denim-Running-Shoes/dp/B0FR991DHJ" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61CMR+WgnyL._AC_UL320_.jpg" alt="Men's MASK Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men's MASK Running Shoes">Men's MASK Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹690.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-C-BLU-Denim-Running-Shoes/dp/B0FR991DHJ" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-Wells-Running-Shoes-10-UK/dp/B08VGP9PB7" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61XwYMOyfwL._AC_UL320_.jpg" alt="Men Wells Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men Wells Running Shoes">Men Wells Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹699.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-Wells-Running-Shoes-10-UK/dp/B08VGP9PB7" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-OXYFIT-Walking-Shoes-India/dp/B09RPVZK5S" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/7198NljaZlL._AC_UL320_.jpg" alt="Men Oxyfit (N) Walking Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men Oxyfit (N) Walking Shoes">Men Oxyfit (N) Walking Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹700.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-OXYFIT-Walking-Shoes-India/dp/B09RPVZK5S" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-OXYFIT-Walking-Shoes-India/dp/B09RPCVBKY" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61xIgcDynvL._AC_UL320_.jpg" alt="Men Oxyfit (N) Walking Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men Oxyfit (N) Walking Shoes">Men Oxyfit (N) Walking Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹700.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-OXYFIT-Walking-Shoes-India/dp/B09RPCVBKY" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Men+Canvas+Slip-on+Shoes" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500" alt="[Est] [Meesho] Campus Men's Casual Canvas Slip-on Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Men's Casual Canvas Slip-on Shoes">[Est] [Meesho] Campus Men's Casual Canvas Slip-on Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹719.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Men+Canvas+Slip-on+Shoes" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Canvas+Slip-on+Shoes+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500" alt="[Google] Campus Men's Casual Canvas Slip-on Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Men's Casual Canvas Slip-on Shoes">[Google] Campus Men's Casual Canvas Slip-on Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">$735.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Canvas+Slip-on+Shoes+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itme55da032c2427?pid=SHOG6BNZAZUVDBBV&lid=LSTSHOG6BNZAZUVDBBVI6DFYC&marketplace=FLIPKART&q=campus+shoes&store=osp&spotlightTagId=default_BestsellerId_osp&srno=s_1_10&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6BNZAZUVDBBV.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/u/m/g/-original-imahgbryaghpuquq.jpeg?q=70" alt="HURRICANE Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="HURRICANE Running Shoes For Men">HURRICANE Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹748.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itme55da032c2427?pid=SHOG6BNZAZUVDBBV&lid=LSTSHOG6BNZAZUVDBBVI6DFYC&marketplace=FLIPKART&q=campus+shoes&store=osp&spotlightTagId=default_BestsellerId_osp&srno=s_1_10&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6BNZAZUVDBBV.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-Rodeo-PRO-Running-Shoes/dp/B09RP8SYBF" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/71-Gr1ulJhL._AC_UL320_.jpg" alt="Men Rodeo-2 Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men Rodeo-2 Running Shoes">Men Rodeo-2 Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹754.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-Rodeo-PRO-Running-Shoes/dp/B09RP8SYBF" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-europa-men-s-comfortable-insole-anti-slip-sole-design-lace-up-training-gym-shoes-men/p/itm17a1a5cfdb6ae?pid=SHOG4G3YWNZCDYGS&lid=LSTSHOG4G3YWNZCDYGSXQ5QHI&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_14&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG4G3YWNZCDYGS.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/y/h/6/-original-imahmd3zpkggyhez.jpeg?q=70" alt="EUROPA Men's | Comfortable Insole | Anti-Slip Sole Desi...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="EUROPA Men's | Comfortable Insole | Anti-Slip Sole Desi...">EUROPA Men's | Comfortable Insole | Anti-Slip Sole Desi...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹779.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-europa-men-s-comfortable-insole-anti-slip-sole-design-lace-up-training-gym-shoes-men/p/itm17a1a5cfdb6ae?pid=SHOG4G3YWNZCDYGS&lid=LSTSHOG4G3YWNZCDYGSXQ5QHI&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_14&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG4G3YWNZCDYGS.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itm2f045a1c43285?pid=SHOG6BNGGGUCVQA8&lid=LSTSHOG6BNGGGUCVQA8NPWKPI&marketplace=FLIPKART&q=campus+shoes&store=osp&spotlightTagId=default_BestsellerId_osp&srno=s_1_13&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6BNGGGUCVQA8.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/p/x/f/-original-imahmd3wyscd6t56.jpeg?q=70" alt="HURRICANE Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="HURRICANE Running Shoes For Men">HURRICANE Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹789.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itm2f045a1c43285?pid=SHOG6BNGGGUCVQA8&lid=LSTSHOG6BNGGGUCVQA8NPWKPI&marketplace=FLIPKART&q=campus+shoes&store=osp&spotlightTagId=default_BestsellerId_osp&srno=s_1_13&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6BNGGGUCVQA8.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/abros-ramsay-running-shoes-men/p/itme38aa47780724?pid=SHOH3JGNDGEVZ3TJ&lid=LSTSHOH3JGNDGEVZ3TJOXYCSP&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_12&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiRWU6ub63h6RXasl2_k3tI7g0TZZq_y1mVy4VgWL0ozMthyKP4HHftKT9u4aQ-uZFVW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/o/c/q/-original-imahfhpmvyg8wdjd.jpeg?q=70" alt="RAMSAY Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="RAMSAY Running Shoes For Men">RAMSAY Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹809.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/abros-ramsay-running-shoes-men/p/itme38aa47780724?pid=SHOH3JGNDGEVZ3TJ&lid=LSTSHOH3JGNDGEVZ3TJOXYCSP&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_12&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiRWU6ub63h6RXasl2_k3tI7g0TZZq_y1mVy4VgWL0ozMthyKP4HHftKT9u4aQ-uZFVW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itmde24f617a5ae4?pid=SHOG6DZSWGVR3PHG&lid=LSTSHOG6DZSWGVR3PHGITJSUX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_7&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6DZSWGVR3PHG.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/w/3/p/-original-imahmd3zntwyqy4h.jpeg?q=70" alt="HURRICANE Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="HURRICANE Running Shoes For Men">HURRICANE Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹810.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itmde24f617a5ae4?pid=SHOG6DZSWGVR3PHG&lid=LSTSHOG6DZSWGVR3PHGITJSUX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_7&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6DZSWGVR3PHG.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-mike-n-running-shoes-men/p/itmf8ff8f65cc63f?pid=SHOG2EYZPCPDTR8T&lid=LSTSHOG2EYZPCPDTR8TOWRDXU&marketplace=FLIPKART&q=campus+shoes&store=osp&spotlightTagId=default_BestsellerId_osp&srno=s_1_9&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG2EYZPCPDTR8T.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/z/d/x/-original-imahmd3zukvbjwkk.jpeg?q=70" alt="MIKE (N) Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="MIKE (N) Running Shoes For Men">MIKE (N) Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹872.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-mike-n-running-shoes-men/p/itmf8ff8f65cc63f?pid=SHOG2EYZPCPDTR8T&lid=LSTSHOG2EYZPCPDTR8TOWRDXU&marketplace=FLIPKART&q=campus+shoes&store=osp&spotlightTagId=default_BestsellerId_osp&srno=s_1_9&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG2EYZPCPDTR8T.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/bersache-lightweight-sports-shoes-walking-gym-trekking-running-men/p/itmfc7e8247de84b?pid=SHOGFGYS7GSDZTRH&lid=LSTSHOGFGYS7GSDZTRHCAP8D3&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_18&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiSvA9f1ISjN2kMdU3evy5P36cNDoeq4ZmoZBTzK2SqmNRduH2DxWY8Phf1vUVSOXQZW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/3/t/j/-resized-2-original-imahbwg7ddddmdp6.jpeg?q=70" alt="Lightweight Sports Shoes For Walking,gym Trekking & Run...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="Lightweight Sports Shoes For Walking,gym Trekking & Run...">Lightweight Sports Shoes For Walking,gym Trekking & Run...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹898.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/bersache-lightweight-sports-shoes-walking-gym-trekking-running-men/p/itmfc7e8247de84b?pid=SHOGFGYS7GSDZTRH&lid=LSTSHOGFGYS7GSDZTRHCAP8D3&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_18&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiSvA9f1ISjN2kMdU3evy5P36cNDoeq4ZmoZBTzK2SqmNRduH2DxWY8Phf1vUVSOXQZW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itm8bf99840d8e1f?pid=SHOG6BNZ9KBAABV4&lid=LSTSHOG6BNZ9KBAABV4Z8DTLD&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_8&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6BNZ9KBAABV4.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/n/0/2/-original-imahmd3x9mzrm9qp.jpeg?q=70" alt="HURRICANE Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="HURRICANE Running Shoes For Men">HURRICANE Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹899.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-hurricane-running-shoes-men/p/itm8bf99840d8e1f?pid=SHOG6BNZ9KBAABV4&lid=LSTSHOG6BNZ9KBAABV4Z8DTLD&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_8&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG6BNZ9KBAABV4.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-Hurricane-BTGRN-BLK-Running-Shoes/dp/B09HCHRKTS" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61lSvGVT2PL._AC_UL320_.jpg" alt="Men Hurricane Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men Hurricane Running Shoes">Men Hurricane Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,014.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-Hurricane-BTGRN-BLK-Running-Shoes/dp/B09HCHRKTS" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/sspa/click" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61tEmh82giL._AC_UL320_.jpg" alt="Women Suave Walking Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Women Suave Walking Shoes">Women Suave Walking Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,057.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/sspa/click" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-11G-677-Black-North-Running/dp/B08PRXXQB3" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61y2MqtoSyL._AC_UL320_.jpg" alt="Men North Plus Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men North Plus Running Shoes">Men North Plus Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,078.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-11G-677-Black-North-Running/dp/B08PRXXQB3" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-North-Black-Running-Shoes/dp/B08PSHLJGL" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61BPnfilugL._AC_UL320_.jpg" alt="Men North Plus Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men North Plus Running Shoes">Men North Plus Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,078.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-North-Black-Running-Shoes/dp/B08PSHLJGL" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-FEROX-L-Grey-D-Grey-Running/dp/B0GZW1HQ4F" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61m6oAOkFoL._AC_UL320_.jpg" alt="Men's FEROX Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men's FEROX Running Shoes">Men's FEROX Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,078.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-FEROX-L-Grey-D-Grey-Running/dp/B0GZW1HQ4F" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-Camp-Glacier-Running-Shoes-India/dp/B0BCQX2GZN" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61e6ved+oZL._AC_UL320_.jpg" alt="Men Camp-Glacier Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men Camp-Glacier Running Shoes">Men Camp-Glacier Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,099.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-Camp-Glacier-Running-Shoes-India/dp/B0BCQX2GZN" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-mike-n-running-shoes-men/p/itm27c989f1e20c6?pid=SHOG4G3Y6VYVWP9B&lid=LSTSHOG4G3Y6VYVWP9BHYEIOG&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_3&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG4G3Y6VYVWP9B.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/g/g/c/9-5g-845-9-campus-mod-blu-wht-original-imahna9wwmhzymsv.jpeg?q=70" alt="MIKE (N) Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="MIKE (N) Running Shoes For Men">MIKE (N) Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,159.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-mike-n-running-shoes-men/p/itm27c989f1e20c6?pid=SHOG4G3Y6VYVWP9B&lid=LSTSHOG4G3Y6VYVWP9BHYEIOG&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_3&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOG4G3Y6VYVWP9B.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-First-B-ORG-Running-Shoes/dp/B0914PVJ49" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61rWcMP4s9L._AC_UL320_.jpg" alt="Men First Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men First Running Shoes">Men First Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,182.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-First-B-ORG-Running-Shoes/dp/B0914PVJ49" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-First-L-Gry-Running-Shoes/dp/B08WPN4TY5" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/71RiFU3KvLL._AC_UL320_.jpg" alt="Men First Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men First Running Shoes">Men First Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,182.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-First-L-Gry-Running-Shoes/dp/B08WPN4TY5" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-first-men-s-running-shoes-pu-foam-comfort-ball-tech-support-lace-up-men/p/itmafd353906016a?pid=SHOGFGMBHNDXZKDB&lid=LSTSHOGFGMBHNDXZKDB3LR8YX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_15&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOGFGMBHNDXZKDB.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/t/s/i/10-11g-787wht-sil-b-org-10-campus-wht-sil-b-org-original-imahhdjg2sqstyhg.jpeg?q=70" alt="FIRST Men's Running Shoes | PU Foam Comfort & Ball-Tech...">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="FIRST Men's Running Shoes | PU Foam Comfort & Ball-Tech...">FIRST Men's Running Shoes | PU Foam Comfort & Ball-Tech...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,221.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-first-men-s-running-shoes-pu-foam-comfort-ball-tech-support-lace-up-men/p/itmafd353906016a?pid=SHOGFGMBHNDXZKDB&lid=LSTSHOGFGMBHNDXZKDB3LR8YX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_15&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOGFGMBHNDXZKDB.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-relto-running-shoes-men/p/itm7fda2a7bcbc0a?pid=SHOHGKKBXM3UEGCV&lid=LSTSHOHGKKBXM3UEGCV6NH1VX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_11&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiQefMD9f3NYfmEKzl9cm6rm5ICFsnMclfvP0q9iKgZJ8I5pk0kGhhFgH0Gtgfx4y6tW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/u/e/2/-original-imahmgpksdgcgm4g.jpeg?q=70" alt="RELTO Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="RELTO Running Shoes For Men">RELTO Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,332.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-relto-running-shoes-men/p/itm7fda2a7bcbc0a?pid=SHOHGKKBXM3UEGCV&lid=LSTSHOHGKKBXM3UEGCV6NH1VX&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_11&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiQefMD9f3NYfmEKzl9cm6rm5ICFsnMclfvP0q9iKgZJ8I5pk0kGhhFgH0Gtgfx4y6tW8202kFsPyeVqOoobdKwH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Men+Running+Walking+Shoes" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500" alt="[Est] [Meesho] Campus Men's Running & Walking Shoes - Lightweight Athletic Sneakers">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Men's Running & Walking Shoes - Lightweight Athletic Sneakers">[Est] [Meesho] Campus Men's Running & Walking Shoes - Lightweight Athl...</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,349.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Men+Running+Walking+Shoes" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Running+Walking+Shoes+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500" alt="[Google] Campus Men's Running & Walking Shoes - Lightweight Athletic Sneakers">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Men's Running & Walking Shoes - Lightweight Athletic Sneakers">[Google] Campus Men's Running & Walking Shoes - Lightweight Athletic S...</h3>
+                    <div class="price-section">
+                        <span class="price-value">$1,379.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Running+Walking+Shoes+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-DRIVO-L-Sky-Running-Shoes/dp/B0FWKWPDDD" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61DtkP2ktlL._AC_UL320_.jpg" alt="Men's DRIVO Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men's DRIVO Running Shoes">Men's DRIVO Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,398.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-DRIVO-L-Sky-Running-Shoes/dp/B0FWKWPDDD" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-drivo-running-shoes-men/p/itma0ed9952f8139?pid=SHOHGPJREDMRWQSH&lid=LSTSHOHGPJREDMRWQSHCKV02P&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_2&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiRhNxp53K9b_lT7R61UpHYJSILcPwT58JC35DqaamWDuzyg_WAADszK1Sj21M6kIvqi13qUKb9kwv5ZxOpzXoO6&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/u/z/e/-original-imahmgpkbmpjsaf4.jpeg?q=70" alt="DRIVO Running Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="DRIVO Running Shoes For Men">DRIVO Running Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,499.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-drivo-running-shoes-men/p/itma0ed9952f8139?pid=SHOHGPJREDMRWQSH&lid=LSTSHOHGPJREDMRWQSHCKV02P&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_2&otracker=search&fm=organic&iid=en_5w20hN7vNuNj2UEqHlAEr0fa5ObYV-oBNWEL_T8TwiRhNxp53K9b_lT7R61UpHYJSILcPwT58JC35DqaamWDuzyg_WAADszK1Sj21M6kIvqi13qUKb9kwv5ZxOpzXoO6&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/Campus-DRIVO-L-Gry-Running-Shoes/dp/B0FWKP7JV8" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61swsekadjL._AC_UL320_.jpg" alt="Men's DRIVO Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="Men's DRIVO Running Shoes">Men's DRIVO Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,510.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/Campus-DRIVO-L-Gry-Running-Shoes/dp/B0FWKP7JV8" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Active+Sports+Gym+Training+Shoes" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" alt="[Est] [Meesho] Campus Active Sports Gym Training Shoes for Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Active Sports Gym Training Shoes for Men">[Est] [Meesho] Campus Active Sports Gym Training Shoes for Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹1,709.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Active+Sports+Gym+Training+Shoes" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Sports+Gym+Training+Shoes+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" alt="[Google] Campus Active Sports Gym Training Shoes for Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Active Sports Gym Training Shoes for Men">[Google] Campus Active Sports Gym Training Shoes for Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">$1,747.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Sports+Gym+Training+Shoes+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Men+Comfort+Lifestyle+Sneaker" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=500" alt="[Est] [Meesho] Campus Men's Comfort Lifestyle Sneaker Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Men's Comfort Lifestyle Sneaker Shoes">[Est] [Meesho] Campus Men's Comfort Lifestyle Sneaker Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹2,249.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Men+Comfort+Lifestyle+Sneaker" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Lifestyle+Sneaker+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=500" alt="[Google] Campus Men's Comfort Lifestyle Sneaker Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Men's Comfort Lifestyle Sneaker Shoes">[Google] Campus Men's Comfort Lifestyle Sneaker Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">$2,299.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Lifestyle+Sneaker+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/sspa/click" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/61F5AbokVRL._AC_UL320_.jpg" alt="ELAN Men's Casual Shoes | ELAN-01">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="ELAN Men's Casual Shoes | ELAN-01">ELAN Men's Casual Shoes | ELAN-01</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹2,399.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/sspa/click" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/sspa/click" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/81YsJPrFUCL._AC_UL320_.jpg" alt="ELAN Men's Derby Shoes | ELAN-17">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="ELAN Men's Derby Shoes | ELAN-17">ELAN Men's Derby Shoes | ELAN-17</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹2,599.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/sspa/click" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.amazon.in/sspa/click" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://m.media-amazon.com/images/I/71SNIhPKyrL._AC_UL320_.jpg" alt="ELAN Men's Derby Shoes | ELAN-16">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #FF9900;">Amazon</span>
+                    <h3 class="product-title" title="ELAN Men's Derby Shoes | ELAN-16">ELAN Men's Derby Shoes | ELAN-16</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹2,599.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.amazon.in/sspa/click" target="_blank">View on Amazon</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.flipkart.com/campus-dazed-sneakers-men/p/itmd6b45d8aad885?pid=SHOHBGR9QBMZTDQM&lid=LSTSHOHBGR9QBMZTDQMR5Z2UJ&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_4&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOHBGR9QBMZTDQM.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/k/q/l/8-22g-1302-campus-fog-l-gry-original-imahbgr8vxfzsjvy.jpeg?q=70" alt="DAZED Sneakers For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #2874F0;">Flipkart</span>
+                    <h3 class="product-title" title="DAZED Sneakers For Men">DAZED Sneakers For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹2,599.00</span>
+                    </div>
+                    <a class="buy-button" href="https://www.flipkart.com/campus-dazed-sneakers-men/p/itmd6b45d8aad885?pid=SHOHBGR9QBMZTDQM&lid=LSTSHOHBGR9QBMZTDQMR5Z2UJ&marketplace=FLIPKART&q=campus+shoes&store=osp&srno=s_1_4&otracker=search&fm=organic&iid=0f3e06ed-f668-4480-aa63-6cd9aa8d5167.SHOHBGR9QBMZTDQM.SEARCH&ppt=None&ppn=None&ssid=9x77vl0mio0000001781299167529&qH=c9a926ec1aa2fc82&ov_redirect=true" target="_blank">View on Flipkart</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Outdoor+Hiking+Trekking+Shoes" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1521093470119-a3acdc43374a?w=500" alt="[Est] [Meesho] Campus Outdoor Sport Hiking & Trekking Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Outdoor Sport Hiking & Trekking Shoes For Men">[Est] [Meesho] Campus Outdoor Sport Hiking & Trekking Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹2,969.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Outdoor+Hiking+Trekking+Shoes" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Hiking+Trekking+Shoes+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1521093470119-a3acdc43374a?w=500" alt="[Google] Campus Outdoor Sport Hiking & Trekking Shoes For Men">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Outdoor Sport Hiking & Trekking Shoes For Men">[Google] Campus Outdoor Sport Hiking & Trekking Shoes For Men</h3>
+                    <div class="price-section">
+                        <span class="price-value">$3,035.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Hiking+Trekking+Shoes+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Breathable+Premium+Running+Shoes" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="[Est] [Meesho] Campus Breathable Premium Cushioned Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Breathable Premium Cushioned Running Shoes">[Est] [Meesho] Campus Breathable Premium Cushioned Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹4,499.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Breathable+Premium+Running+Shoes" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Premium+Cushioned+Running+Shoes+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="[Google] Campus Breathable Premium Cushioned Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Breathable Premium Cushioned Running Shoes">[Google] Campus Breathable Premium Cushioned Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">$4,599.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Premium+Cushioned+Running+Shoes+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Premium+Leather+Designer+Sneakers" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500" alt="[Est] [Meesho] Campus Premium Leather Designer Lifestyle Sneakers">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Premium Leather Designer Lifestyle Sneakers">[Est] [Meesho] Campus Premium Leather Designer Lifestyle Sneakers</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹8,099.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Premium+Leather+Designer+Sneakers" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Leather+Designer+Sneakers+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500" alt="[Google] Campus Premium Leather Designer Lifestyle Sneakers">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Premium Leather Designer Lifestyle Sneakers">[Google] Campus Premium Leather Designer Lifestyle Sneakers</h3>
+                    <div class="price-section">
+                        <span class="price-value">$8,279.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Leather+Designer+Sneakers+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.meesho.com/search?q=Campus+Flagship+Carbon+Running+Shoes" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500" alt="[Est] [Meesho] Campus Flagship Pro Racing Carbon-Plate Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #F43397;">Meesho</span>
+                    <h3 class="product-title" title="[Est] [Meesho] Campus Flagship Pro Racing Carbon-Plate Running Shoes">[Est] [Meesho] Campus Flagship Pro Racing Carbon-Plate Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">₹13,499.10</span>
+                    </div>
+                    <a class="buy-button" href="https://www.meesho.com/search?q=Campus+Flagship+Carbon+Running+Shoes" target="_blank">View on Meesho</a>
+                </div>
+            </div>
+            
+
+            <div class="product-card">
+                
+                <div class="card-image-container">
+                    <a href="https://www.google.co.in/search?q=Campus+Carbon+Plate+Racing+Shoes+buy" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <img class="product-image" src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500" alt="[Google] Campus Flagship Pro Racing Carbon-Plate Running Shoes">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="platform-badge" style="background-color: #64748B;">Google</span>
+                    <h3 class="product-title" title="[Google] Campus Flagship Pro Racing Carbon-Plate Running Shoes">[Google] Campus Flagship Pro Racing Carbon-Plate Running Shoes</h3>
+                    <div class="price-section">
+                        <span class="price-value">$13,799.08</span>
+                    </div>
+                    <a class="buy-button" href="https://www.google.co.in/search?q=Campus+Carbon+Plate+Racing+Shoes+buy" target="_blank">View on Google</a>
+                </div>
+            </div>
+            
+        </div>
+        
+        <footer>
+            E-Commerce Price Tracker & Predictor Agent • Pure Python Scraper & Analytics
+        </footer>
+    </div>
+</body>
+</html>
