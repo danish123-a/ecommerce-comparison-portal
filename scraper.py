@@ -1240,11 +1240,23 @@ async def search_platforms_async(query, platform="All", headless=True):
         import os
         is_cloud = "SPACE_ID" in os.environ or os.environ.get("SYSTEM") == "spaces"
         
+        stealth_args = [
+            "--disable-blink-features=AutomationControlled", 
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--window-size=1280,800",
+            "--ignore-certificate-errors",
+            "--proxy-server='direct://'",
+            "--proxy-bypass-list=*"
+        ]
+        
         # Launch Playwright's own Chromium
         try:
             browser = await p.chromium.launch(
                 headless=headless,
-                args=["--disable-blink-features=AutomationControlled", "--no-sandbox"]
+                args=stealth_args
             )
             print(f"  [Scraper] Playwright Chromium launched (headless={headless}).")
         except Exception as e:
@@ -1259,7 +1271,7 @@ async def search_platforms_async(query, platform="All", headless=True):
             meesho_headless = True if is_cloud else False
             meesho_browser = await p.chromium.launch(
                 headless=meesho_headless,
-                args=["--disable-blink-features=AutomationControlled", "--no-sandbox"]
+                args=stealth_args
             )
             print(f"  [Scraper] Meesho browser launched (headless={meesho_headless}).")
         except Exception as e:

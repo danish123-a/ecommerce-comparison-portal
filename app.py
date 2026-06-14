@@ -21,6 +21,10 @@ except Exception:
 # Check if running on Hugging Face Spaces
 is_hf = "SPACE_ID" in os.environ or os.environ.get("SYSTEM") == "spaces"
 
+if is_hf:
+    print("Running on Hugging Face Spaces. Ensuring Playwright browsers are installed...")
+    os.system("playwright install chromium")
+
 # Initialize the agent
 agent = PriceTrackerAgent("prices.db")
 
@@ -51,10 +55,23 @@ async def extract_products_from_custom_url(url, query="", headless=True):
             import os
             is_cloud = "SPACE_ID" in os.environ or os.environ.get("SYSTEM") == "spaces"
             use_headless = True if is_cloud else (headless and (platform != "Meesho"))
+            
+            stealth_args = [
+                "--disable-blink-features=AutomationControlled", 
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--window-size=1280,800",
+                "--ignore-certificate-errors",
+                "--proxy-server='direct://'",
+                "--proxy-bypass-list=*"
+            ]
+            
             try:
                 browser = await p.chromium.launch(
                     headless=use_headless,
-                    args=["--disable-blink-features=AutomationControlled", "--no-sandbox"]
+                    args=stealth_args
                 )
             except Exception as e:
                 print(f"[Scraper] Chromium launch failed: {e}")
