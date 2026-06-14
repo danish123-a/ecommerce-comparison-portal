@@ -862,7 +862,9 @@ async def scrape_search_amazon(browser, query):
         "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"
         "if(!window.chrome) window.chrome={runtime:{}};"
     )
+    from playwright_stealth import stealth_async
     page = await context.new_page()
+    await stealth_async(page)
     await page.route("**/*", block_unnecessary_resources)
     try:
         url = f"https://www.amazon.in/s?k={urllib.parse.quote(query)}"
@@ -954,7 +956,9 @@ async def scrape_search_flipkart(browser, query):
         "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"
         "if(!window.chrome) window.chrome={runtime:{}};"
     )
+    from playwright_stealth import stealth_async
     page = await context.new_page()
+    await stealth_async(page)
     await page.route("**/*", block_unnecessary_resources)
     try:
         url = f"https://www.flipkart.com/search?q={urllib.parse.quote(query)}"
@@ -1052,7 +1056,9 @@ async def scrape_search_google(browser, query):
         "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"
         "if(!window.chrome) window.chrome={runtime:{}};"
     )
+    from playwright_stealth import stealth_async
     page = await context.new_page()
+    await stealth_async(page)
     await page.route("**/*", block_unnecessary_resources)
     try:
         url = f"https://www.google.co.in/search?q={urllib.parse.quote(query)}&tbm=shop"
@@ -1362,7 +1368,9 @@ async def scrape_search_meesho(browser, query):
         "Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});"
         "Object.defineProperty(navigator, 'languages', {get: () => ['en-IN', 'en-US', 'en']});"
     )
+    from playwright_stealth import stealth_async
     page = await context.new_page()
+    await stealth_async(page)
     await page.route("**/*", block_unnecessary_resources)
     try:
         url = f"https://www.meesho.com/search?q={urllib.parse.quote(query)}"

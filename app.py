@@ -82,7 +82,9 @@ async def extract_products_from_custom_url(url, query="", headless=True):
                 viewport={"width": 1280, "height": 800}
             )
             await context.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+            from playwright_stealth import stealth_async
             page = await context.new_page()
+            await stealth_async(page)
             
             # Use networkidle for platforms like Myntra to allow React to fully render
             wait_cond = "networkidle" if platform == "Myntra" else "domcontentloaded"

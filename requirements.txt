@@ -9,6 +9,7 @@ gradio>=4.0.0
 
 # Web scraping — browser automation (Amazon, Flipkart, Meesho)
 playwright>=1.40.0
+playwright-stealth>=1.0.6
 
 # Web scraping — HTML parsing (BeautifulSoup)
 beautifulsoup4>=4.12.0
