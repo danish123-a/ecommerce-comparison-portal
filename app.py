@@ -710,6 +710,7 @@ async def run_three_column_search(product_name, show_browser):
         amazon_items   = results_map.get("Amazon", [])
         flipkart_items = results_map.get("Flipkart", [])
         meesho_items   = results_map.get("Meesho", [])
+        google_items   = results_map.get("Google", [])
             
         # Helper to format item row HTML
         def get_column_html(items, platform):
@@ -737,8 +738,9 @@ async def run_three_column_search(product_name, show_browser):
         amazon_html = get_column_html(amazon_items, "Amazon")
         flipkart_html = get_column_html(flipkart_items, "Flipkart")
         meesho_html = get_column_html(meesho_items, "Meesho")
+        google_html = get_column_html(google_items, "Google")
         
-        # Build 3-column layout with JS fullscreen double-click toggle
+        # Build 4-column layout with JS fullscreen double-click toggle
         html_layout = f"""
         <div style="display: flex; gap: 1.5rem; justify-content: space-between; overflow-x: auto; padding: 0.5rem; align-items: stretch; margin-bottom: 1rem;">
             <!-- AMAZON -->
@@ -788,6 +790,23 @@ async def run_three_column_search(product_name, show_browser):
                 </h3>
                 <div style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; padding-right: 0.25rem;">
                     {meesho_html}
+                </div>
+            </div>
+            
+            <!-- GOOGLE SHOPPING -->
+            <div class="platform-col" id="col-google" ondblclick="toggleFullscreen('col-google')" style="flex: 1; min-width: 280px; background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; height: 620px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; box-sizing: border-box;">
+                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; margin-bottom: 0.25rem; text-align: left; display: flex; justify-content: space-between;">
+                    <span>Double-click / double-tap to zoom</span>
+                </div>
+                <h3 style="color: #4285F4; font-size: 1.15rem; font-weight: 700; border-bottom: 2px solid #4285F4; padding-bottom: 0.4rem; margin: 0 0 0.75rem 0; display: flex; justify-content: space-between; align-items: center;">
+                    <span>Google Shopping</span>
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                        <span style="font-size: 0.72rem; background: #4285F4; color: #fff; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 600;">{len(google_items)} Items</span>
+                        <button onclick="event.stopPropagation(); toggleFullscreen('col-google')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-size: 0.85rem; padding: 0.15rem 0.35rem; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Toggle Fullscreen">⛶</button>
+                    </div>
+                </h3>
+                <div style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; padding-right: 0.25rem;">
+                    {google_html}
                 </div>
             </div>
         </div>
@@ -1068,7 +1087,7 @@ with gr.Blocks(title="E-Commerce Agent UI") as demo:
                 with gr.Column(scale=1):
                     target_input = gr.Dropdown(
                         label="1. Target Platform or Search URL", 
-                        choices=["Amazon", "Flipkart", "Meesho"],
+                        choices=["Amazon", "Flipkart", "Meesho", "Google"],
                         value="Amazon",
                         allow_custom_value=True,
                         info="Type Amazon, Flipkart, Meesho OR paste a custom search page URL directly."
@@ -1113,7 +1132,7 @@ with gr.Blocks(title="E-Commerce Agent UI") as demo:
 
         # TAB 2: MULTI-PLATFORM COLUMNS
         with gr.Tab("📊 Multi-Platform Columns"):
-            gr.Markdown("Compare Amazon, Flipkart, and Meesho results side-by-side. **Double-click** any column to view that platform in full screen.")
+            gr.Markdown("Compare Amazon, Flipkart, Meesho, and Google results side-by-side. **Double-click** any column to view that platform in full screen.")
             
             with gr.Row():
                 col_product_input = gr.Textbox(
@@ -1131,7 +1150,7 @@ with gr.Blocks(title="E-Commerce Agent UI") as demo:
                 col_search_btn = gr.Button("Search & Compare Platforms", variant="primary")
                 
             with gr.Row():
-                col_view_output = gr.HTML(label="Multi-Platform 3-Columns Portal")
+                col_view_output = gr.HTML(label="Multi-Platform 4-Columns Portal")
                 
             col_search_btn.click(
                 fn=run_three_column_search,

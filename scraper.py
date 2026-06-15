@@ -1327,7 +1327,7 @@ async def search_platforms_async(query, platform="All", headless=True):
                 results_map[plat] = res
                 print(f"  [{plat}] Got {len(res)} live results.")
                 
-    requested_plats = ["Amazon", "Flipkart", "Meesho"] if platform == "All" else [platform]
+    requested_plats = ["Amazon", "Flipkart", "Meesho", "Google"] if platform == "All" else [platform]
 
     for plat in requested_plats:
         if not results_map.get(plat):
