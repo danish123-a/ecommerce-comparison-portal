@@ -23,7 +23,8 @@ is_hf = "SPACE_ID" in os.environ or os.environ.get("SYSTEM") == "spaces"
 
 if is_hf:
     print("Running on Hugging Face Spaces. Ensuring Playwright browsers are installed...")
-    os.system("playwright install chromium")
+    import threading
+    threading.Thread(target=lambda: os.system("playwright install chromium"), daemon=True).start()
 
 # Initialize the agent
 agent = PriceTrackerAgent("prices.db")
